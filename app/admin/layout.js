@@ -33,60 +33,10 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 
 const navigation = [
-  // 🔹 Dashboard & User Management
-  { name: "Dashboard & User Management", href: "", icon: HomeIcon },
-  { name: "Profile", href: "/admin", icon: HomeIcon },
+  // 🔹User Management
+  { name: "User Management", href: "", icon: HomeIcon },
   { name: "Users", href: "/admin/users", icon: UserGroupIcon },
   { name: "Add User", href: "/admin/add-user", icon: PlusIcon },
-
-  // 🔹 Blog Management
-  { name: "Blog Management", href: "", icon: MegaphoneIcon },
-  { name: "Blog", href: "/admin/blog", icon: MegaphoneIcon },
-  { name: "Software", href: "/admin/software", icon: CodeBracketIcon },
-  { name: "Newsletter", href: "/admin/news-letter", icon: NewspaperIcon },
-
-  // 🔹 Event Management
-  { name: "Event Management", href: "", icon: CalendarIcon },
-  { name: "Events", href: "/admin/events", icon: CalendarIcon },
-  { name: "Applicants", href: "/admin/applicants", icon: UsersIcon },
-
-  // 🔹 Component Management
-  { name: "Component Management", href: "", icon: CalendarIcon },
-  {
-    name: "Components",
-    href: "/admin/components",
-    icon: DocumentDuplicateIcon,
-  },
-
-  // 🔹 E-commerce Management
-  { name: "E-commerce Management", href: "", icon: TruckIcon },
-  { name: "Customer", href: "/admin/customer", icon: ScaleIcon },
-  { name: "Orders", href: "/admin/orders", icon: TruckIcon },
-  { name: "Products", href: "/admin/products", icon: CubeIcon },
-  {
-    name: "Product Categories",
-    href: "/admin/product-categories",
-    icon: RectangleGroupIcon,
-  },
-
-  // 🔹 System & Settings
-  {
-    name: "System & Settings",
-    href: "",
-    icon: StarIcon,
-  },
-  {
-    name: "Reviews & Ratings",
-    href: "/admin/reviews-ratings",
-    icon: StarIcon,
-  },
-  {
-    name: "Bug Reports",
-    href: "/admin/bug-reports",
-    icon: ExclamationTriangleIcon,
-  },
-  { name: "Settings", href: "/admin/settings", icon: Cog8ToothIcon },
-  { name: "Logout", href: "", icon: ArrowTurnDownRightIcon },
 ];
 
 function classNames(...classes) {

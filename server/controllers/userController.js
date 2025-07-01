@@ -69,10 +69,10 @@ export async function getUsers(request) {
       ];
     }
     if (city) {
-      query.city = city;
+      query.city = { $regex: city, $options: "i" };
     }
     if (state) {
-      query.state = state;
+      query.state = { $regex: state, $options: "i" };
     }
 
     const total = await UserModel.countDocuments(query);

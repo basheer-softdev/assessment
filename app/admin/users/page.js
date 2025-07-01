@@ -2,8 +2,9 @@
 import EditModal from "@/client/components/EditModal";
 import { FunnelIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
+import Select from "react-select";
 
 const Page = () => {
   const [Users, setUsers] = useState([]);
@@ -11,10 +12,15 @@ const Page = () => {
   const [openModel, setOpenModel] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [city, setCity] = useState("");
+  const [state, setState] = useState("");
   const [page, setPage] = useState(1);
-  const [limit] = useState(5);
+  const [limit, setLimit] = useState(5);
   const [totalPages, setTotalPages] = useState(1);
+  const [sortField, setSortField] = useState("createdAt");
+  const [sortOrder, setSortOrder] = useState("desc");
+  const [showFilters, setShowFilters] = useState(false);
 
   const handleChange = (key, value) => {
     setSelectedUser((prev) => ({
@@ -26,7 +32,7 @@ const Page = () => {
   const handleGet = async () => {
     try {
       const response = await axios.get("/api/user", {
-        params: { search, city, page, limit },
+        params: { search: debouncedSearch, city, state, page, limit, sortField, sortOrder },
       });
       const { data, pagination } = response.data;
       setUsers(data);
@@ -70,9 +76,50 @@ const Page = () => {
     }
   };
 
+  const handleClearFilters = () => {
+    setSearch("");
+    setCity("");
+    setState("");
+    setPage(1);
+    setSortField("createdAt");
+    setSortOrder("desc");
+    setLimit(5);
+  };
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 400); // 400ms debounce
+    return () => clearTimeout(handler);
+  }, [search]);
+
   useEffect(() => {
     handleGet();
-  }, []);
+    // eslint-disable-next-line
+  }, [debouncedSearch, city, state, page, sortField, sortOrder, limit]);
+
+  useEffect(() => {
+    setPage(1);
+    // eslint-disable-next-line
+  }, [debouncedSearch, city, state, sortField, sortOrder, limit]);
+
+  const sortFieldOptions = [
+    { value: "createdAt", label: "Sort by Created" },
+    { value: "firstName", label: "Sort by First Name" },
+    { value: "lastName", label: "Sort by Last Name" },
+    { value: "email", label: "Sort by Email" },
+    { value: "city", label: "Sort by City" },
+    { value: "state", label: "Sort by State" },
+  ];
+  const sortOrderOptions = [
+    { value: "asc", label: "Ascending" },
+    { value: "desc", label: "Descending" },
+  ];
+  const limitOptions = [
+    { value: 3, label: "3 per page" },
+    { value: 5, label: "5 per page" },
+    { value: 7, label: "7 per page" },
+  ];
 
   return (
     <div>
@@ -84,26 +131,77 @@ const Page = () => {
           Total Number Of Users :{" "}
           <span className="text-red-400 font-semibold">{total}</span>
         </p>
-        <button className="flex text-nowrap items-center gap-2 border border-gray-300 rounded-sm px-2.5 py-1.5 text-gray-900">
-          Filter <FunnelIcon className="size-4" />{" "}
+        <button
+          className="flex text-nowrap items-center gap-2 border border-gray-300 rounded-sm px-2.5 py-1.5 text-gray-900"
+          onClick={() => setShowFilters((prev) => !prev)}
+          type="button"
+        >
+          Filter <FunnelIcon className="size-4" />
         </button>
       </div>
-      <div className="flex gap-4">
-        <input
-          type="text"
-          placeholder="Search..."
-          className="border px-3 py-1 rounded"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Filter by city..."
-          className="border px-3 py-1 rounded"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-        />
-      </div>
+      {showFilters && (
+        <div className="flex flex-wrap gap-4 my-4 items-center">
+          <input
+            type="text"
+            placeholder="Search by name or email..."
+            className="border-gray-300 border px-3 py-1.5 rounded min-w-[180px]"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Filter by city..."
+            className="border-gray-300 border px-3 py-1.5 rounded min-w-[140px]"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Filter by state..."
+            className="border-gray-300 border px-3 py-1.5 rounded min-w-[140px]"
+            value={state}
+            onChange={(e) => setState(e.target.value)}
+          />
+          <div className="min-w-[170px]">
+            <Select
+              options={sortFieldOptions}
+              value={sortFieldOptions.find((o) => o.value === sortField)}
+              onChange={(option) => setSortField(option.value)}
+              isSearchable={false}
+              classNamePrefix="react-select"
+              placeholder="Sort Field"
+            />
+          </div>
+          <div className="min-w-[140px]">
+            <Select
+              options={sortOrderOptions}
+              value={sortOrderOptions.find((o) => o.value === sortOrder)}
+              onChange={(option) => setSortOrder(option.value)}
+              isSearchable={false}
+              classNamePrefix="react-select"
+              placeholder="Sort Order"
+            />
+          </div>
+          <div className="min-w-[120px]">
+            <Select
+              options={limitOptions}
+              value={limitOptions.find((o) => o.value === limit)}
+              onChange={(option) => { setLimit(option.value); setPage(1); }}
+              isSearchable={false}
+              classNamePrefix="react-select"
+              placeholder="Per Page"
+            />
+          </div>
+          <button
+            className="border border-gray-300 px-3 py-1.5 rounded bg-gray-50 hover:bg-gray-100"
+            onClick={handleClearFilters}
+            type="button"
+          >
+            Clear Filters
+          </button>
+        </div>
+      )}
+      <div className="overflow-x-auto">
       <table className="border border-gray-300 rounded-sm w-full">
         <thead>
           <tr className="bg-gray-200 border-b border-gray-300">
@@ -172,6 +270,7 @@ const Page = () => {
           )}
         </tbody>
       </table>
+      </div>
       <div className="flex justify-center mt-6 space-x-2">
         <button
           disabled={page === 1}
