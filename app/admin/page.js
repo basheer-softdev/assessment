@@ -1,5 +1,6 @@
 "use client";
 import EditModal from "@/client/components/EditModal";
+import DeleteConfirmationModal from "@/client/components/DeleteConfirmationModal";
 import { FunnelIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import React, { useEffect, useState, useRef } from "react";
@@ -11,6 +12,8 @@ const Page = () => {
   const [total, setTotal] = useState(0);
   const [openModel, setOpenModel] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [city, setCity] = useState("");
@@ -71,8 +74,10 @@ const Page = () => {
       }
 
       setUsers(Users.filter((user) => user._id !== userId));
+      setShowDeleteConfirm(false);
+      setUserToDelete(null);
     } catch (err) {
-      toast.error("Failed to create user.");
+      toast.error("Failed to delete user.");
     }
   };
 
@@ -251,7 +256,10 @@ const Page = () => {
                     </button>
 
                     <button
-                      onClick={() => handleDelete(user?._id)}
+                      onClick={() => {
+                        setUserToDelete(user._id);
+                        setShowDeleteConfirm(true);
+                      }}
                       className="bg-red-600 text-sm text-white w-24 h-9 rounded-sm hover:bg-red-500 transition-all duration-500"
                     >
                       Delete
@@ -298,6 +306,15 @@ const Page = () => {
             setOpenModel(false);
             setSelectedUser(null);
           }}
+        />
+      )}
+      {showDeleteConfirm && (
+        <DeleteConfirmationModal
+          onClose={() => {
+            setShowDeleteConfirm(false);
+            setUserToDelete(null);
+          }}
+          onConfirm={() => handleDelete(userToDelete)}
         />
       )}
     </div>

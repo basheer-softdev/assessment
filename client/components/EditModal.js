@@ -21,7 +21,19 @@ const EditModal = ({ userDetail, handleChange, handleUpdate, onClose }) => {
         ref={modalRef}
         className="bg-white rounded-md shadow-md max-h-[90vh] overflow-y-auto w-full max-w-3xl"
       >
-        <div className="mx-auto max-w-fit my-12">
+        <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200">
+          <h2 className="text-lg font-semibold text-gray-900">Edit User</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-500"
+          >
+            <span className="sr-only">Close</span>
+            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div className="px-6 py-8">
           <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
             <div>
               <label
@@ -177,11 +189,18 @@ const EditModal = ({ userDetail, handleChange, handleUpdate, onClose }) => {
               </div>
             </div>
           </div>
-          <div className="mt-10">
+          <div className="mt-10 flex justify-end gap-4">
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-md px-6 py-2.5 text-sm font-semibold text-gray-900 border border-gray-300 hover:bg-gray-50 transition-colors duration-200"
+            >
+              Cancel
+            </button>
             <button
               type="submit"
               onClick={handleUpdate}
-              className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              className="rounded-md bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-colors duration-200"
             >
               Update
             </button>
