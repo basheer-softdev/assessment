@@ -23,7 +23,74 @@ const Page = () => {
     }));
   };
 
+  const validateForm = () => {
+    const { firstName, lastName, email, phone, street, city, state, code } =
+      userDetail;
+
+    if (!firstName) {
+      toast.error("First name is required.");
+      return false;
+    }
+    if (firstName.length < 3) {
+      toast.error("First name must be at least 3 characters.");
+      return false;
+    }
+
+    if (!lastName) {
+      toast.error("Last name is required.");
+      return false;
+    }
+    if (lastName.length < 3) {
+      toast.error("Last name must be at least 3 characters.");
+      return false;
+    }
+
+    if (!email) {
+      toast.error("Email is required.");
+      return false;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Please enter a valid email address.");
+      return false;
+    }
+
+    if (!phone) {
+      toast.error("Phone number is required.");
+      return false;
+    }
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(phone)) {
+      toast.error("Phone number must be a valid 10-digit number.");
+      return false;
+    }
+
+    if (!street) {
+      toast.error("Street address is required.");
+      return false;
+    }
+
+    if (!city) {
+      toast.error("City is required.");
+      return false;
+    }
+
+    if (!state) {
+      toast.error("State is required.");
+      return false;
+    }
+
+    if (!code) {
+      toast.error("Postal code is required.");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleCreate = async () => {
+    if (!validateForm()) return;
+
     try {
       const response = await axios.post("/api/user", {
         userDetail: userDetail,
