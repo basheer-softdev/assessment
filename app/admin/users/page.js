@@ -100,7 +100,6 @@ const Page = () => {
 
   useEffect(() => {
     setPage(1);
-    // eslint-disable-next-line
   }, [debouncedSearch, city, state, sortField, sortOrder, limit]);
 
   const sortFieldOptions = [

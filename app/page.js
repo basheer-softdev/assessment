@@ -21,7 +21,7 @@ const Page = () => {
           Assessment Portal
         </h1>
         <p className="text-gray-600 mb-10">
-          Choose which part of the project you'd like to view:
+          Choose which part of the project you&apos;d like to view:
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
