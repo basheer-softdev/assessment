@@ -34,7 +34,7 @@ import Image from "next/image";
 const navigation = [
   // 🔹User Management
   { name: "User Management", href: "", icon: HomeIcon },
-  { name: "Users", href: "/admin/users", icon: UserGroupIcon },
+  { name: "Users", href: "/admin", icon: UserGroupIcon },
   { name: "Add User", href: "/admin/add-user", icon: PlusIcon },
 ];
 
@@ -91,9 +91,9 @@ export default function AdminLayout({ children }) {
               <div className="flex grow flex-col gap-y-5 overflow-y-auto scrollbar-hide bg-gray-900 px-6 pb-2 ring-1 ring-white/10">
                 <div className="flex h-16 shrink-0 items-center">
                   <Link href="/">
-                    <Image
+                    <img
                       alt="Your Company"
-                      src="/logo.png"
+                      src="/user.png"
                       width={32}
                       height={32}
                       className="h-8 w-auto"
@@ -155,7 +155,7 @@ export default function AdminLayout({ children }) {
         <div className="flex grow flex-col gap-y-5 overflow-y-auto scrollbar-hide bg-gray-900 px-6">
           <div className="flex h-16 shrink-0 items-center">
             <Link href="/">
-              <Image alt="Your Company" src="/logo.png" width={32} height={32} className="h-8 w-auto" />
+              <img alt="Your Company" src="/user.png" width={32} height={32} className="h-8 w-auto" />
             </Link>
           </div>
           <nav className="flex flex-1 flex-col">
